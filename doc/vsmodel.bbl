@@ -1,0 +1,30 @@
+\begin{thebibliography}{4}
+\providecommand{\natexlab}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem[{\textit{Maynard and Chen}(1975)}]{Maynard1975}
+Maynard, N.~C., et~al. (1975), Isolated cold plasma regions: Observations and
+  their relation to possible production mechanisms, \textit{Journal of
+  Geophysical Research (1896-1977)}, \textit{80}(7), 1009--1013,
+  \doi{https://doi.org/10.1029/JA080i007p01009}.
+
+\bibitem[{\textit{Stern}(1975)}]{Stern1975}
+Stern, D.~P. (1975), The motion of a proton in the equatorial magnetosphere,
+  \textit{Journal of Geophysical Research (1896-1977)}, \textit{80}(4),
+  595--599, \doi{https://doi.org/10.1029/JA080i004p00595}.
+
+\bibitem[{\textit{Volland}(1973)}]{Volland1973}
+Volland, H. (1973), A semiempirical model of large-scale magnetospheric
+  electric fields, \textit{Journal of Geophysical Research (1896-1977)},
+  \textit{78}(1), 171--180, \doi{https://doi.org/10.1029/JA078i001p00171}.
+
+\bibitem[{\textit{Zhao et~al.}(2017)}]{Zhao2017}
+Zhao, H., et~al. (2017), Van allen probes measurements of energetic particle
+  deep penetration into the low l region (l < 4) during the storm on 8 april
+  2016, \textit{Journal of Geophysical Research: Space Physics},
+  \textit{122}(12), 12,140--12,152, \doi{https://doi.org/10.1002/2017JA024558}.
+
+\end{thebibliography}

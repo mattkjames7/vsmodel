@@ -69,15 +69,7 @@ The polar coordinates used are defined such that `r` is the radial distance from
 
 ## Derivation
 
-As in Zhau et al. 2017, we start with the electrostatic potential:
-$$
-U(r,\phi) = -\frac{a}{r} - br^\gamma\sin{\phi}
-$$
-where *r* is the radial distance in units of *R<sub>E</sub>*; *&phi;* is the azimuth; *a* is the corotation constant, *a*=92.4 kV *R<sub>E</sub>*; *&gamma;* is the shielding exponent (*&gamma;=2*); and *b* is related to the convection electric field using 
-$$
-b = \frac{0.045}{(1.0 - 0.159 Kp + 0.0093 K_p^2)^3} \text{ (kV $R_E^{-2}$)}
-$$
-from Maynard and Chen, 1975.
+The derivation of the model equations can be found [here](doc/vsmodel.pdf) - if there any mistakes, please file a bug report, thanks!
 
 
 
