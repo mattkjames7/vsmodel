@@ -55,6 +55,31 @@ Er,Et,Ep = vsmodel.ModelPol(r,phi,Kp)
 
 where `Kp` is the *K<sub>p</sub>* index; `x` and `y`  are the Cartesian coordinates in the magnetic equatorial plane (in R<sub>E</sub>, where R<sub>E</sub>=6378 km); `r` and `phi` are the equatorial radial distance from the centre of the Earth (in *R<sub>E</sub>*) and the azimuthal angle (`phi`=0.0 at noon, in radians). Both functions return the electric field in units of mV/m
 
+### Plotting the model
+
+The function `vsmodel.PlotModelEq` will plot the V-S model potential, electric field, a dipole magnetic field and the **E**x**B** velocity in the equatorial plane, e.g.:
+
+```python
+import vsmodel
+import matplotlib.pyplot as plt
+plt.figure(figsize=(9,8))
+ax0 = vsmodel.PlotModelEq('E',Kp=1.0,maps=[2,2,0,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
+ax1 = vsmodel.PlotModelEq('E',Kp=5.0,maps=[2,2,1,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
+ax2 = vsmodel.PlotModelEq('V',Kp=1.0,maps=[2,2,0,1],fig=plt,scale=[100.0,100000.0])
+ax3 = vsmodel.PlotModelEq('V',Kp=5.0,maps=[2,2,1,1],fig=plt,scale=[100.0,100000.0])
+ax0.set_title('$K_p=1$')
+ax2.set_title('$K_p=1$')
+ax3.set_title('$K_p=5$')
+ax1.set_title('$K_p=5$')
+plt.tight_layout()
+```
+
+Which should produce this:
+
+![vsexample.png](vsexample.png)
+
+
+
 ### Notes on the coordinate systems
 
 #### SM

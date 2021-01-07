@@ -21,8 +21,8 @@ zlabs = {	'U':	'Potential (V)',
 			'Bz':	'Magnetic Field, $B_z$, (nT)',
 			}
 			
-def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,fig=None,
-		maps=[1,1,0,0],zlog=True,cmap='gnuplot',scale=None,Verbose=False):
+def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,fig=None,maps=[1,1,0,0],
+		ShowContour=True,zlog=True,cmap='gnuplot',scale=None,Verbose=False,fmt='%1.0f'):
 	'''
 	Plots various models in the equatorial plane.
 	
@@ -106,9 +106,10 @@ def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,fig=None,
 	zlabel = zlabs[Model]
 	if zlog:
 		norm = colors.LogNorm(vmin=scale[0],vmax=scale[1])
+		lvl = 10**np.linspace(np.log10(scale[0]),np.log10(scale[1]),10)
 	else:
 		norm = colors.Normalize(vmin=scale[0],vmax=scale[1])	
-	
+		lvl = 10**np.linspace(scale[0],scale[1],10)
 	
 
 	
@@ -128,6 +129,10 @@ def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,fig=None,
 	#plot the mesh
 	sm = ax.pcolormesh(ye,xe,data,cmap=cmap,norm=norm,)
 
+	if ShowContour:
+		cs = ax.contour(yc,xc,data,lvl,cmap='Greys',norm=norm)
+		ax.clabel(cs, inline=1, fontsize=10,fmt=fmt)
+		
 	#plot the planet
 	PlotPlanetXY(ax)
 
