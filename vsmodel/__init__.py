@@ -6,3 +6,4 @@ from .Dipole import GetDipole
 from .VExB import VExB
 from .VExBModel import VExBModel
 from .PlotModelEq import PlotModelEq
+from .PlotVectorEq import PlotVectorEq

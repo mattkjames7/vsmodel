@@ -78,7 +78,22 @@ Which should produce this:
 
 ![vsexample.png](vsexample.png)
 
+Alternatively, we can plot the model vectors as a field of arrows:
 
+```python
+import vsmodel
+import matplotlib.pyplot as plt
+plt.figure(figsize=(9,8))
+ax0 = vsmodel.PlotVectorEq('E',Kp=1.0,maps=[2,2,0,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
+ax1 = vsmodel.PlotVectorEq('E',Kp=5.0,maps=[2,2,1,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
+ax2 = vsmodel.PlotVectorEq('V',Kp=1.0,maps=[2,2,0,1],fig=plt,scale=[100.0,100000.0])
+ax3 = vsmodel.PlotVectorEq('V',Kp=5.0,maps=[2,2,1,1],fig=plt,scale=[100.0,100000.0])
+plt.tight_layout()
+```
+
+which produces:
+
+![vsvector.png](vsvector.png)
 
 ### Notes on the coordinate systems
 

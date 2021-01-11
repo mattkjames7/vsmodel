@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="vsmodel",
-    version="0.0.1",
+    version="1.0.0",
     author="Matthew Knight James",
     author_email="mattkjames7@gmail.com",
     description="A simple implementation of the Volland-Stern electric field model.",
