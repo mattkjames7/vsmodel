@@ -98,6 +98,43 @@ E_z &= 0.
 \end{align}
 
 
+\section{SAPS Electric Field}
+
+	This section uses the electrostatic potential due to SAPS as described in \citet{Goldstein2005},
+	
+	\begin{equation}
+		U_{saps}(r,\phi,K_p) = -V_s(K_p) F(r,\phi,K_p) G(\phi),
+	\end{equation}
+
+	where
+	
+	\begin{align}
+		V_s(Kp) &= 0.75 K_p^2 \text{ (in kV)}, \\
+		F(r,\phi,K_p) &= \frac{1}{2} + \frac{1}{\pi}\arctan{\left[\frac{2}{\alpha(\phi,K_p)}\left\{ r - R_s(\phi)\right\}\right]}, \\
+		G(\phi) &= \sum_{m=0}^{2} \left\{A_m \cos{[m(\phi - \phi_0)]} + B_m \sin{[m(\phi-\phi_0)]} \right\},
+	\end{align}
+	
+	and
+	
+	\begin{align}
+		\alpha(\phi,K_p) &= 0.15 + (2.55 - 0.27 K_p)\left[1 + \cos{\left(\phi - \frac{7\pi}{12}\right)}\right], \\
+		R_s(\phi,K_p) &= R_0(K_p)\left(\frac{1+\beta}{1 + \beta\cos{(\phi-\pi)}}\right)^\kappa, \\
+		R_0(K_p) &= 4.4 - 0.6(K_p - 5) \text{ (in $R_E$)},\\
+		A_m &= [0.53,0.37,0.1],\\
+		B_m &= [0.0,0.21,-0.1],\\
+		\phi_0 &= \frac{\pi}{2}, \\
+		\beta &= 0.97,\\
+		\kappa &= 0.14.
+	\end{align}
+	
+	The cylindrical components of the electric field are given by,
+	
+	\begin{align}
+		E_r &= V_s(K_p)\frac{\partial F(r,\phi,K_p)}{\partial r} G(\phi),\\
+		E_\phi &= \frac{1}{r} V_s \left[ F(r,\phi,K_p)\frac{\text{d} G(\phi)}{\text{d} \phi} + \frac{\partial F(r,\phi,K_p)}{\partial \phi} G(\phi) \right],\\
+		E_z &= 0.
+	\end{align}
+
 \section{SM Model Field}
 
 	The previous section describes the model in polar/cylindrical coordinates (they are equivalent at $z=0$), here we convert the model to SM coordinates by rotating about the $z$-axis.
