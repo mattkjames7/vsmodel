@@ -1,9 +1,9 @@
 import numpy as np
-from .ModelCart import ModelCart
+from .ModelE import ModelECart
 from .Dipole import GetDipole
 from .VExB import VExB
 
-def VExBModel(x,y,z,Kp):
+def VExBModel(x,y,z,Kp,Esw=None,Vsw=None,Bz=None):
 	'''
 	Estimate the ExB drift using a dipole magnetic field with the
 	Volland-Stern E field model.
@@ -22,7 +22,7 @@ def VExBModel(x,y,z,Kp):
 	Bz *= 1e-9
 
 	#get the E field
-	Ex,Ey,Ez = ModelCart(x,y,Kp)
+	Ex,Ey,Ez = ModelECart(x,y,Kp,Esw,Vsw,Bz)
 	
 	#convert from mV/m to V/m
 	Ex *= 1e-3

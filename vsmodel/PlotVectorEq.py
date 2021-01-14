@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from .PlotPlanet import PlotPlanetXY
-from .ModelCart import ModelCart
+from .ModelE import ModelECart
 from .VExBModel import VExBModel
 
 
@@ -12,7 +12,7 @@ zlabs = {	'E':	r'Electric Field, $\mathbf{E}$, (mV m$^{-1}$)',
 			}
 
 
-def _ModelGrid(Model,Rmax,dR,Kp):
+def _ModelGrid(Model,Rmax,dR,Kp,Esw,Vsw,Bz):
 	#create a grid of points to calculate the model at
 	nR = 2*np.int32(Rmax/dR)
 	xe = np.linspace(-Rmax,Rmax,nR+1)
@@ -26,9 +26,9 @@ def _ModelGrid(Model,Rmax,dR,Kp):
 	
 	#calculate the model
 	if  'E' in Model:
-		mx,my,mz = ModelCart(xc,yc,Kp)
+		mx,my,mz = ModelECart(xc,yc,Kp,Esw,Vsw,Bz)
 	elif 'V' in Model:
-		mx,my,mz = VExBModel(xc,yc,zc,Kp)
+		mx,my,mz = VExBModel(xc,yc,zc,Kp,Esw,Vsw,Bz)
 	m = np.sqrt(mx**2 + my**2 + mz**2)
 
 	
@@ -42,7 +42,7 @@ def _ModelGrid(Model,Rmax,dR,Kp):
 	return xc,yc,mx,my,m	
 
 
-def PlotVectorEq(Model='V',Rmax=10.0,dR=1.0,Kp=1.0,fig=None,maps=[1,1,0,0],
+def PlotVectorEq(Model='V',Rmax=10.0,dR=1.0,Kp=1.0,Esw=None,Vsw=None,Bz=None,fig=None,maps=[1,1,0,0],
 		ShowContour=True,zlog=True,cmap='gnuplot',scale=None,Verbose=False,fmt='%4.2f'):
 	'''
 	Plots various models in the equatorial plane.
@@ -58,6 +58,14 @@ def PlotVectorEq(Model='V',Rmax=10.0,dR=1.0,Kp=1.0,fig=None,maps=[1,1,0,0],
 		Size of bins on plot
 	Kp : float
 		Kp index
+	Esw : float
+		Electric field due to the solar wind propagating past the 
+		magnetosphere in mV/m.
+	Vsw : float
+		x-component (positive towards the Sun) of the solar wind 
+		velocity in km/s.
+	Bz : float
+		Z-component of the IMF in nT.
 	fig : object
 		This should be either None (to create a new figure), a matplotlib.pyplot
 		object (to add a new set of axes to an existing plot) or an 
@@ -79,7 +87,7 @@ def PlotVectorEq(Model='V',Rmax=10.0,dR=1.0,Kp=1.0,fig=None,maps=[1,1,0,0],
 	
 	'''
 	#get the model grid
-	xc,yc,mx,my,m = _ModelGrid(Model,Rmax,dR,Kp)
+	xc,yc,mx,my,m = _ModelGrid(Model,Rmax,dR,Kp,Esw,Vsw,Bz)
 	
 	#get the scale limits
 	if scale is None:
@@ -121,7 +129,7 @@ def PlotVectorEq(Model='V',Rmax=10.0,dR=1.0,Kp=1.0,fig=None,maps=[1,1,0,0],
 					   coordinates='axes')
 	if ShowContour:
 		#get a dense version of the model grid
-		xcc,ycc,mxc,myc,mc = _ModelGrid(Model,Rmax,Rmax/100.0,Kp)
+		xcc,ycc,mxc,myc,mc = _ModelGrid(Model,Rmax,Rmax/100.0,Kp,Esw,Vsw,Bz)
 		
 		cs = ax.contour(ycc,xcc,mc,lvl,cmap='Greys',norm=norm)
 		ax.clabel(cs, inline=1, fontsize=10,fmt=fmt)

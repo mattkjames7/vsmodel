@@ -3,28 +3,53 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from .PlotPlanet import PlotPlanetXY
-from .ModelCart import ModelCart
-from .PotentialCart import PotentialCart
+from .ModelE import ModelECart
+from .Potential import PotentialCart
 from .VExBModel import VExBModel
 from .Dipole import GetDipole
-
-zlabs = {	'U':	'Potential (V)',
-			'E':	'Electric Field, $|\mathbf{E}|$, (mV m$^{-1}$)',
-			'Ex':	'Electric Field, $E_x$, (mV m$^{-1}$)',
-			'Ey':	'Electric Field, $E_y$, (mV m$^{-1}$)',
-			'V':	'Velocity, $|\mathbf{V}|$, (m s$^{-1}$)',
-			'Vx':	'Velocity, $V_x$, (m s$^{-1}$)',
-			'Vy':	'Velocity, $V_y$, (m s$^{-1}$)',
-			'B':	'Magnetic Field, $|\mathbf{B}|$, (nT)',
-			'Bx':	'Magnetic Field, $B_x$, (nT)',
-			'By':	'Magnetic Field, $B_y$, (nT)',
-			'Bz':	'Magnetic Field, $B_z$, (nT)',
+from .CorotModel import CorotModelCart,CorotPotentialCart
+from .MCModel import MCModelCart,MCPotentialCart
+from .SAPSModel import SAPSModelCart,SAPSPotentialCart
+from .SWModel import SWModelCart,SWPotentialCart
+	
+zlabs = {	'U':		'Potential (kV)',
+			'E':		'Electric Field, $|\mathbf{E}|$, (mV m$^{-1}$)',
+			'Ex':		'Electric Field, $E_x$, (mV m$^{-1}$)',
+			'Ey':		'Electric Field, $E_y$, (mV m$^{-1}$)',
+			'V':		'Velocity, $|\mathbf{V}|$, (m s$^{-1}$)',
+			'Vx':		'Velocity, $V_x$, (m s$^{-1}$)',
+			'Vy':		'Velocity, $V_y$, (m s$^{-1}$)',
+			'B':		'Magnetic Field, $|\mathbf{B}|$, (nT)',
+			'Bx':		'Magnetic Field, $B_x$, (nT)',
+			'By':		'Magnetic Field, $B_y$, (nT)',
+			'Bz':		'Magnetic Field, $B_z$, (nT)',
+			'U_SAPS': 	'SAPS Potential (kV)',
+			'U_Corot': 	'Corotation Potential (kV)',
+			'U_MC':		'Maynard and Chen 1975 Potential (kV)',
+			'U_SW':		'SW Convection Potential (kV)',
+			'E_SAPS':	'SAPS Electric Field, $|\mathbf{E}|$, (mV m$^{-1}$)',
+			'Ex_SAPS':	'SAPS Electric Field, $E_x$, (mV m$^{-1}$)',
+			'Ey_SAPS':	'SAPS Electric Field, $E_y$, (mV m$^{-1}$)',
+			'E_Corot':	'SAPS Electric Field, $|\mathbf{E}|$, (mV m$^{-1}$)',
+			'Ex_Corot':	'SAPS Electric Field, $E_x$, (mV m$^{-1}$)',
+			'Ey_Corot':	'SAPS Electric Field, $E_y$, (mV m$^{-1}$)',
+			'E_MC':		'Maynard and Chen 1975 Electric Field, $|\mathbf{E}|$, (mV m$^{-1}$)',
+			'Ex_MC':	'Maynard and Chen 1975 Electric Field, $E_x$, (mV m$^{-1}$)',
+			'Ey_MC':	'Maynard and Chen 1975 Electric Field, $E_y$, (mV m$^{-1}$)',
+			'E_SW':		'SW Convection Electric Field, $|\mathbf{E}|$, (mV m$^{-1}$)',
+			'Ex_SW':	'SW Convection Electric Field, $E_x$, (mV m$^{-1}$)',
+			'Ey_SW':	'SW Convection Electric Field, $E_y$, (mV m$^{-1}$)',
 			}
 			
-def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,fig=None,maps=[1,1,0,0],
-		ShowContour=True,zlog=True,cmap='gnuplot',scale=None,Verbose=False,fmt='%1.0f'):
+def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,Esw=None,Vsw=None,Bz=None,fig=None,maps=[1,1,0,0],
+		ShowContour=True,zlog=True,cmap='gnuplot',scale=None,Verbose=False,fmt='%1.0f',nlvl=10):
 	'''
 	Plots various models in the equatorial plane.
+
+	NOTE:
+	To use the Maynard and Chen version, set Esw, Bz and Vsw keywords
+	equal to None (this is their default). Otherwise, either set Esw or
+	both Bz and Vsw to use the Goldstein version.
 	
 	Inputs
 	======
@@ -39,6 +64,14 @@ def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,fig=None,maps=[1,1,0,0],
 		Size of bins on plot
 	Kp : float
 		Kp index
+	Esw : float
+		Electric field due to the solar wind propagating past the 
+		magnetosphere in mV/m.
+	Vsw : float
+		x-component (positive towards the Sun) of the solar wind 
+		velocity in km/s.
+	Bz : float
+		Z-component of the IMF in nT.
 	fig : object
 		This should be either None (to create a new figure), a matplotlib.pyplot
 		object (to add a new set of axes to an existing plot) or an 
@@ -73,14 +106,30 @@ def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,fig=None,maps=[1,1,0,0],
 	
 	#calculate the model
 	if Model == 'U':
-		data = PotentialCart(xc,yc,Kp)
-	elif 'E' in Model:
-		data = ModelCart(xc,yc,Kp)
-	elif 'B' in Model:
+		data = PotentialCart(xc,yc,Kp,Esw,Vsw,Bz)
+	elif Model in ['E','Ex','Ey']:
+		data = ModelECart(xc,yc,Kp,Esw,Vsw,Bz)
+	elif Model in ['B','Bx','By','Bz']:
 		dip = GetDipole()
 		data = dip(xc,yc,zc)
-	elif 'V' in Model:
-		data = VExBModel(xc,yc,zc,Kp)
+	elif Model in ['V','Vx','Vy']:
+		data = VExBModel(xc,yc,zc,Kp,Esw,Vsw,Bz)
+	elif 'E' in Model and 'SAPS' in Model:
+		data = SAPSModelCart(xc,yc,Kp)
+	elif 'E' in Model and 'Corot' in Model:
+		data = CorotModelCart(xc,yc)
+	elif 'E' in Model and 'MC' in Model:
+		data = MCModelCart(xc,yc,Kp)
+	elif 'E' in Model and 'SW' in Model:
+		data = SWModelCart(xc,yc,Esw,Vsw,Bz)
+	elif 'U' in Model and 'SAPS' in Model:
+		data = SAPSPotentialCart(xc,yc,Kp)
+	elif 'U' in Model and 'Corot' in Model:
+		data = CorotPotentialCart(xc,yc)
+	elif 'U' in Model and 'MC' in Model:
+		data = MCPotentialCart(xc,yc,Kp)
+	elif 'U' in Model and 'SW' in Model:
+		data = SWPotentialCart(xc,yc,Esw,Vsw,Bz)
 	
 	if 'x' in Model:
 		data = data[0]
@@ -89,7 +138,7 @@ def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,fig=None,maps=[1,1,0,0],
 	elif 'z' in Model:
 		data = data[2]
 	
-	if Model in ['E','B','V']:
+	if not ('U' in Model or 'x' in Model or 'y' in Model or 'z' in Model):
 		data = np.sqrt(data[0]**2 + data[1]**2 + data[2]**2)
 	
 	#remove stuff from within the planet
@@ -106,10 +155,10 @@ def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,fig=None,maps=[1,1,0,0],
 	zlabel = zlabs[Model]
 	if zlog:
 		norm = colors.LogNorm(vmin=scale[0],vmax=scale[1])
-		lvl = 10**np.linspace(np.log10(scale[0]),np.log10(scale[1]),10)
+		lvl = 10**np.linspace(np.log10(scale[0]),np.log10(scale[1]),nlvl)
 	else:
 		norm = colors.Normalize(vmin=scale[0],vmax=scale[1])	
-		lvl = 10**np.linspace(scale[0],scale[1],10)
+		lvl = np.linspace(scale[0],scale[1],nlvl)
 	
 
 	

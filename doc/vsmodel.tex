@@ -15,77 +15,88 @@ This document describes the derivation of the model equations for the \texttt{vs
 
 \section{Derivation of the Model}
 
-In this section we derive the components of the Volland-Stern electric field model \citep{Volland1973,Stern1975} in polar coordinates (section \ref{SectPol}) and cylindrical coordinates (section \ref{SectCyl}).
-
-As in \citet{Zhao2017}, we start with an electrostatic potential:
+In this section we derive the components of the Volland-Stern electric field model \citep{Volland1973,Stern1975} in cylindrical coordinates. The Volland-Stern model starts with an electrostatic potential, $U(r,\phi)$, from which the electric field is obtained using
 
 \begin{equation}
-U(r,\phi) = -\frac{a}{r} - br^\gamma\sin{\phi},
-\end{equation}
+	\mathbf{E} = - \mathbf{\nabla} U, \label{EqEField}
+\end{equation} 
 
-where $r$ is the radial distance in units of $R_E$; $\phi$ is the azimuth; $a$ is the corotation constant, $a$=92.4~kV~$R_E$; $\gamma$ is the shielding exponent ($\gamma=2$); and $b$ is related to the convection electric field using
+where
 
 \begin{equation}
-	b = \frac{0.045}{(1.0 - 0.159 Kp + 0.0093 K_p^2)^3} \text{ (kV $R_E^{-2}$)}
+	\mathbf{\nabla} U = \frac{\partial U}{\partial r} \mathbf{\hat{r}} + \frac{1}{r} \frac{\partial U}{\partial \phi} \mathbf{\hat{\phi}} + \frac{\partial U}{\partial z}\mathbf{\hat{z}}. \label{EqDelU}
 \end{equation}
 
-from \citet{Maynard1975}.
+The coordinate system is such that $z$ lies along the dipole axis of the planet; $x$ points approximately sunward where the magnetic equatorial plane intersects the plane containing both the dipole axis and the Earth-Sun line; the $y$ axis points approximately duskward. In cylindrical coordinates: $r$ is the radial distance from the $z$ axis (i.e. $r = \sqrt{x^2 + y^2}$); $\phi$ is the azimuth, equal to 0 at noon where $\phi = \arctan{y,x}$.
 
-The electric field is then obtained using $\mathbf{E} = - \mathbf{\nabla} U$.
+The potential, $U$, is made up of a corotational component, $U_{cor}$, and a convection component, $U_{cnv}$. The corotation component used here is defined by
 
-The following sections derive the radial, $E_r$, and azimuthal, $E_\phi$, components of the electric field using two slightly different methods, ultimately with the same result (thankfully) - this is likely due to the fact that we are only defining the two component in the equatorial plane.
+\begin{equation}
+	U_{cor} = -\frac{a}{r},
+\end{equation}
 
-\subsection{Polar Coordinates}
-	\label{SectPol}
-	In the case where we use polar coordinates, the electric field is calculated using:
-	
-	\begin{equation}
-		\mathbf{E} =  - \mathbf{\nabla} U = -\frac{\partial U}{\partial r} \mathbf{\hat{r}} - \frac{1}{r} \frac{\partial U}{\partial \theta} \mathbf{\hat{\theta}} - \frac{1}{r \sin{\theta}} \frac{\partial U}{\partial \phi} \mathbf{\hat{\phi}}, \label{EqDelUP}
-	\end{equation}
-	
-	where 
-	
-	\begin{align}
-		\frac{\partial U}{\partial r} &= a r^{-2} - b \gamma r^{\gamma -1} \sin{\phi}, \\
-		\frac{\partial U}{\partial \theta} &= 0, \\
-		\frac{\partial U}{\partial \phi} & = -b r^{\gamma} \cos{\phi},
-	\end{align}
-	
-	and because we are looking at the equatorial plane, $\theta = \pi$.
-	
-	Which means that the electric field components become
-	
-	\begin{align}
-		E_r &= -a r^{-2} + b \gamma r^{\gamma-1} \sin{\phi}, \\
-		E_\theta &= 0, \\
-		E_\phi &= b r^{\gamma-1}\cos{\phi}.
-	\end{align}
-	
-\subsection{Cylindrical Coordinates}
-	\label{SectCyl}	
-	Alternatively, we can try the same derivation using the cylindrical coordinate system to achieve effectively the same result. \textit{In all honestly - I'm not 100\% sure which I should be using, but both give the same result.}
-	
-	The cylindrical equivalent to equation \ref{EqDelUp}:
-	\begin{equation}
-		\mathbf{E} =  - \mathbf{\nabla} U = -\frac{\partial U}{\partial r} \mathbf{\hat{r}} - \frac{1}{r} \frac{\partial U}{\partial \phi} \mathbf{\hat{\phi}} - \frac{\partial U}{\partial z}\mathbf{\hat{z}}, \label{EqDelUC}
-	\end{equation}
-		
-	where 
-	
-	\begin{align}
-		\frac{\partial U}{\partial r} &= a r^{-2} - b \gamma r^{\gamma -1} \sin{\phi}, \label{EqdErC} \\
-		\frac{\partial U}{\partial \phi} & = -b r^{\gamma} \cos{\phi}, \label{EqdEpC} \\
-		\frac{\partial U}{\partial z} &= 0.  \label{EqdEzC}
-	\end{align}
-		
-	From equations \ref{EqDelUC}, \ref{EqdErC}, \ref{EqdEpC} and \ref{EqdEzC}:
-	
-	
-	\begin{align}
-		E_r &= -a r^{-2} + b \gamma r^{\gamma-1} \sin{\phi}, \\
-		E_\phi &= b r^{\gamma-1}\cos{\phi}, \\
-		E_z &= 0.
-	\end{align}
+where $a=92.4$~keV is the corotation constant used in \citet{Zhao2017}.
+
+The electric field due to corotation is given by:
+\begin{align}
+	E_r &= -\frac{a}{r^2}, \\
+	E_\phi &= 0,\\
+	E_z &= 0.
+\end{align}
+
+There are two options for the convection component of this model - the simpler option is from \citet{Maynard1975} and is derived in section \ref{SectMC}; the more complicated option described by \citet{Goldstein2005} separates the convection component into solar wind electric field (section \ref{SectSW}) and SAPS (section \ref{SectSAPS}) parts.
+
+
+\section{The \citet{Maynard1975} $\mathbf{E}$-field}
+
+This section describes the electric field due to convection as described by \citet{Maynard1975}. The potential used is
+
+\begin{equation}
+	U = -A_{mc} r^\gamma \sin{\phi}, \label{EqMCPot}
+\end{equation}
+
+where 
+
+\begin{equation}
+	A_{mc} = \frac{0.045}{(1.0 - 0.159 Kp + 0.0093 K_p^2)^3} \text{ (kV $R_E^{-2}$)}
+\end{equation}
+
+and $\gamma=2$ is the shielding parameter.
+
+The electric field components become
+\begin{align}
+	E_r &= \gamma A_{mc} r^{(\gamma-1)}\sin{\phi},\\
+	E_\phi &= A_{mc} r^{(\gamma-1)} \cos{\phi},\\
+	E_z &= 0.
+\end{align}
+
+\section{Solar Wind Electric Field}
+
+This section uses the electric field due to the solar wind propagation past the Earth as described in \citet{Goldstein2005}. The electric field due to the solar wind is given by,
+
+\begin{equation}
+	E_{sw} = -V_{sw} B_z,
+\end{equation}
+
+where $V_{sw}$ is the $x$ component of the solar wind velocity (negative Sunward), and $B_z$ is the north-south component of the interplanetary magnetic field (IMF). $E_{sw}$ has a minimum value of 0.1~mV~m$^{-1}$, so when the IMF is northward there is still a little bit of a viscous interaction with the magnetosphere.
+
+The potential is given by 
+\begin{equation}
+	U = -A_{sw} r^2 \sin{\phi},
+\end{equation}
+where 
+\begin{equation}
+	A_{sw} = 0.12 E_{sw} (6.6)^{(1-\gamma)}, \text{ (kV $R_E^{-2}$)}
+\end{equation}
+and $E_{sw}$ in this case should be converted from mV~m$^{-1}$ to kV~$R_E^{-1}$.
+
+The electric field components become
+\begin{align}
+E_r &= \gamma A_{sw} r^{(\gamma-1)}\sin{\phi},\\
+E_\phi &= A_{sw} r^{(\gamma-1)} \cos{\phi},\\
+E_z &= 0.
+\end{align}
+
 
 \section{SM Model Field}
 
