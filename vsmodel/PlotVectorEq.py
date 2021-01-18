@@ -7,8 +7,8 @@ from .ModelE import ModelECart
 from .VExBModel import VExBModel
 
 
-zlabs = {	'E':	r'Electric Field, $\mathbf{E}$, (mV m$^{-1}$)',
-			'V':	r'Velocity, $\mathbf{V}$, (10,000 $\times$ m s$^{-1}$)',
+zlabs = {	'E':	r'$\mathbf{E}$, (mV m$^{-1}$)',
+			'V':	r'$\mathbf{V}$, (10,000 $\times$ m s$^{-1}$)',
 			}
 
 
@@ -124,8 +124,17 @@ def PlotVectorEq(Model='V',Rmax=10.0,dR=1.0,Kp=1.0,Esw=None,Vsw=None,Bz=None,fig
 		qkl = 10000.0
 	else:
 		qkl = 1
+		
+	#create the label
+	qklab = zlabel
+	if Esw is None and (not (Vsw is None or Bz is None)):
+		Esw = -Vsw*1e6*Bz*1e-9
+	if (not Esw is None):
+		qklab += ', $K_p$ = {:3.1f}'.format(Kp) + '; $E_{sw}$ = ' + '{:3.1f}'.format(Esw) + ' mV m$^{-1}$'
+	else:
+		qklab += ', $K_p$ = {:3.1f}'.format(Kp)
 	Q = ax.quiver(yc,xc,my,mx,m,cmap='jet',norm=norm)
-	qk = ax.quiverkey(Q, 0.0, 1.02, qkl, zlabel + ', $K_p$ = {:3.1f}'.format(Kp), labelpos='E',
+	qk = ax.quiverkey(Q, 0.0, 1.02, qkl, qklab, labelpos='E',
 					   coordinates='axes')
 	if ShowContour:
 		#get a dense version of the model grid

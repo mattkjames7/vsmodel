@@ -73,6 +73,8 @@ The function `vsmodel.PlotModelEq` will plot the V-S model potential, electric f
 ```python
 import vsmodel
 import matplotlib.pyplot as plt
+
+#The simple model
 plt.figure(figsize=(9,8))
 ax0 = vsmodel.PlotModelEq('E',Kp=1.0,maps=[2,2,0,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
 ax1 = vsmodel.PlotModelEq('E',Kp=5.0,maps=[2,2,1,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
@@ -83,28 +85,58 @@ ax2.set_title('$K_p=1$')
 ax3.set_title('$K_p=5$')
 ax1.set_title('$K_p=5$')
 plt.tight_layout()
+
+#The Goldstein model
+plt.figure(figsize=(9,8))
+ax0 = vsmodel.PlotModelEq('E',Kp=1.0,Vsw=-400.0,Bz=-2.5,maps=[2,2,0,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
+ax1 = vsmodel.PlotModelEq('E',Kp=5.0,Vsw=-400.0,Bz=-2.5,maps=[2,2,1,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
+ax2 = vsmodel.PlotModelEq('V',Kp=1.0,Vsw=-400.0,Bz=-2.5,maps=[2,2,0,1],fig=plt,scale=[100.0,10000.0])
+ax3 = vsmodel.PlotModelEq('V',Kp=5.0,Vsw=-400.0,Bz=-2.5,maps=[2,2,1,1],fig=plt,scale=[100.0,10000.0])
+ax0.set_title('$K_p=1$; $E_{sw}=-1$ mV m$^{-1}$')
+ax2.set_title('$K_p=1$; $E_{sw}=-1$ mV m$^{-1}$')
+ax3.set_title('$K_p=5$; $E_{sw}=-1$ mV m$^{-1}$')
+ax1.set_title('$K_p=5$; $E_{sw}=-1$ mV m$^{-1}$')
+plt.tight_layout()
 ```
 
 Which should produce this:
 
 ![vsexample.png](vsexample.png)
 
+and
+
+![vsexampleG](vsexampleG.png)
+
 Alternatively, we can plot the model vectors as a field of arrows:
 
 ```python
 import vsmodel
 import matplotlib.pyplot as plt
+
+#The simple model
 plt.figure(figsize=(9,8))
 ax0 = vsmodel.PlotVectorEq('E',Kp=1.0,maps=[2,2,0,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
 ax1 = vsmodel.PlotVectorEq('E',Kp=5.0,maps=[2,2,1,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
 ax2 = vsmodel.PlotVectorEq('V',Kp=1.0,maps=[2,2,0,1],fig=plt,scale=[100.0,100000.0])
 ax3 = vsmodel.PlotVectorEq('V',Kp=5.0,maps=[2,2,1,1],fig=plt,scale=[100.0,100000.0])
 plt.tight_layout()
+
+#The Goldstein model
+plt.figure(figsize=(9,8))
+ax0 = vsmodel.PlotVectorEq('E',Kp=1.0,Vsw=-400.0,Bz=-2.5,maps=[2,2,0,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
+ax1 = vsmodel.PlotVectorEq('E',Kp=5.0,Vsw=-400.0,Bz=-2.5,maps=[2,2,1,0],fig=plt,fmt='%4.2f',scale=[0.01,10.0])
+ax2 = vsmodel.PlotVectorEq('V',Kp=1.0,Vsw=-400.0,Bz=-2.5,maps=[2,2,0,1],fig=plt,scale=[100.0,100000.0])
+ax3 = vsmodel.PlotVectorEq('V',Kp=5.0,Vsw=-400.0,Bz=-2.5,maps=[2,2,1,1],fig=plt,scale=[100.0,100000.0])
+plt.tight_layout()
 ```
 
 which produces:
 
 ![vsvector.png](vsvector.png)
+
+and
+
+![vsvectorG.png](vsvectorG.png)
 
 ### Notes on the coordinate systems
 
@@ -114,9 +146,9 @@ The Solar Magnetic (SM) coordinate system is defined such that the *z*-axis is a
 
 As this model is defined only in the equatorial plane, there is no input for the *z* coordinate; also there is not a *z* component to the model so `Ez` is filled with zeros.
 
-#### Polar
+#### Cylindrical
 
-The polar coordinates used are defined such that `r` is the radial distance from the centre of the planet, `theta` is the polar angle (angle from the positive *z*-axis) and `phi` is the azimuthal angle. `theta` is not used as an input, it is assumed that `theta=`&pi; in the model. The outputs `Er`, `Et` and `Ep` correspond to the radial, polar and azimuthal components of the model electric field. As with the Cartesian version of the model, there is no vertical component to the electric field model, so the `Et` component is filled with zeros.
+The cylindrical coordinates used are defined such that `r` is the radial distance from the *z*-axis and `phi` is the azimuthal angle. `z` is not used as an input because the model is confined to the equatorial plane. The outputs `Er`, `Ep` and `Ez` correspond to the radial, azimuthal and vertical (*z*) components of the model electric field. As with the Cartesian version of the model, there is no vertical component to the electric field model, so the `Ez` component is filled with zeros.
 
 ## Derivation
 
