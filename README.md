@@ -3,7 +3,7 @@ A simple implementation of the Volland-Stern electric field model (Volland, 1973
 
 The electric field model here is only defined in the equatorial plane around the Earth, where any vertical component returns is filled with zeros.
 
-The implementation of this model is based on that used by Zhao et al. 2017.
+There are two implementations of this model: one is based on that used by Zhao et al. 2017 which uses the Maynard and Chen 1975 relation between the *K<sub>p</sub>* index and the convection electric field; the other uses the work of Goldstein et al 2005 which separates the convection electric field into two components.
 
 ## Installation
 
@@ -41,16 +41,27 @@ pip3 install vsmodel --user
 
 ## Usage
 
-There are two functions which can be used to calculate the model electric field, one using polar coordinates and the other using the Cartesian Solar Magnetic (SM) coordinate system:
+There are two functions which can be used to calculate the model electric field, one using cylindrical coordinates and the other using the Cartesian Solar Magnetic (SM) coordinate system:
 
 ```python
 import vsmodel
 
+##### The simple model using Maynard and Chen ####
 #the Cartesian model
 Ex,Ey,Ez = vsmodel.ModelCart(x,y,Kp)
 
-#the polar model
-Er,Et,Ep = vsmodel.ModelPol(r,phi,Kp)
+#the cylindrical model
+Er,Ep,Ez = vsmodel.ModelE(r,phi,Kp)
+
+
+#### The Goldstein et al 2005 version ####
+#the Cartesian model, either by providing solar wind speed (Vsw) and IMF Bz (Bz), or the equivalent E field (Esw)
+Ex,Ey,Ez = vsmodel.ModelCart(x,y,Kp,Vsw=Vsw,Bz=Bz)
+Ex,Ey,Ez = vsmodel.ModelCart(x,y,Kp,Esw=Esw)
+
+#the cylindrical model
+Er,Ep,Ez = vsmodel.ModelE(r,phi,Kp,Vsw=Vsw,Bz=Bz)
+Er,Ep,Ez = vsmodel.ModelE(r,phi,Kp,Esw=Esw)
 ```
 
 where `Kp` is the *K<sub>p</sub>* index; `x` and `y`  are the Cartesian coordinates in the magnetic equatorial plane (in R<sub>E</sub>, where R<sub>E</sub>=6378 km); `r` and `phi` are the equatorial radial distance from the centre of the Earth (in *R<sub>E</sub>*) and the azimuthal angle (`phi`=0.0 at noon, in radians). Both functions return the electric field in units of mV/m
@@ -114,6 +125,8 @@ The derivation of the model equations can be found [here](doc/vsmodel.pdf) - if 
 
 
 ## References
+
+Goldstein, J., Burch, J. L., and Sandel, B. R. (2005), Magnetospheric model of subauroral polarization stream, *J. Geophys. Res.*, 110, A09222, doi:[10.1029/2005JA011135](https://doi.org/10.1029/2005JA011135).
 
 Maynard, N. C., and Chen, A. J. (1975), Isolated cold plasma regions: Observations and their relation to possible production mechanisms, *J. Geophys. Res.*, 80( 7), 1009– 1013, doi:[10.1029/JA080i007p01009](https://doi.org/10.1029/JA080i007p01009).
 

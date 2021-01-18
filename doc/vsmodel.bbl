@@ -1,9 +1,15 @@
-\begin{thebibliography}{4}
+\begin{thebibliography}{5}
 \providecommand{\natexlab}[1]{#1}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
   \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
   \urlstyle{rm}\Url}\fi
+
+\bibitem[{\textit{Goldstein et~al.}(2005)\textit{Goldstein, Burch, and
+  Sandel}}]{Goldstein2005}
+Goldstein, J., et~al. (2005), Magnetospheric model of subauroral polarization
+  stream, \textit{Journal of Geophysical Research: Space Physics},
+  \textit{110}(A9), \doi{https://doi.org/10.1029/2005JA011135}.
 
 \bibitem[{\textit{Maynard and Chen}(1975)}]{Maynard1975}
 Maynard, N.~C., et~al. (1975), Isolated cold plasma regions: Observations and

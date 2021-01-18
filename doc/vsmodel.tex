@@ -37,22 +37,23 @@ The potential, $U$, is made up of a corotational component, $U_{cor}$, and a con
 
 where $a=92.4$~keV is the corotation constant used in \citet{Zhao2017}.
 
-The electric field due to corotation is given by:
+The electric field due to corotation, $\mathbf{E_{cor}}$, is given by:
 \begin{align}
 	E_r &= -\frac{a}{r^2}, \\
 	E_\phi &= 0,\\
-	E_z &= 0.
+	E_z &= 0,
 \end{align}
+where $\mathbf{E_{cor}} = [E_r,E_\phi,E_z]$.
 
-There are two options for the convection component of this model - the simpler option is from \citet{Maynard1975} and is derived in section \ref{SectMC}; the more complicated option described by \citet{Goldstein2005} separates the convection component into solar wind electric field (section \ref{SectSW}) and SAPS (section \ref{SectSAPS}) parts.
+There are two options for the convection component of this model - the simpler option is from \citet{Maynard1975} and is derived in section \ref{SectMC}; the more complicated option described by \citet{Goldstein2005} separates the convection component into solar wind electric field (section \ref{SectSW}) and SAPS (section \ref{SectSAPS}) parts. The overall electric field is simply obtained by adding the separate components of the model, i.e. $\mathbf{E} = \mathbf{E_{cor}} + \mathbf{E_{cnv}}$.
 
 
 \section{The \citet{Maynard1975} $\mathbf{E}$-field}
-
+\label{SectMC}
 This section describes the electric field due to convection as described by \citet{Maynard1975}. The potential used is
 
 \begin{equation}
-	U = -A_{mc} r^\gamma \sin{\phi}, \label{EqMCPot}
+	U_{mc} = -A_{mc} r^\gamma \sin{\phi}, \label{EqMCPot}
 \end{equation}
 
 where 
@@ -71,7 +72,7 @@ The electric field components become
 \end{align}
 
 \section{Solar Wind Electric Field}
-
+\label{SectSW}
 This section uses the electric field due to the solar wind propagation past the Earth as described in \citet{Goldstein2005}. The electric field due to the solar wind is given by,
 
 \begin{equation}
@@ -82,7 +83,7 @@ where $V_{sw}$ is the $x$ component of the solar wind velocity (negative Sunward
 
 The potential is given by 
 \begin{equation}
-	U = -A_{sw} r^2 \sin{\phi},
+	U_{sw} = -A_{sw} r^2 \sin{\phi},
 \end{equation}
 where 
 \begin{equation}
@@ -99,7 +100,7 @@ E_z &= 0.
 
 
 \section{SAPS Electric Field}
-
+	\label{SectSAPS}
 	This section uses the electrostatic potential due to SAPS as described in \citet{Goldstein2005},
 	
 	\begin{equation}
@@ -213,7 +214,7 @@ E_z &= 0.
 	
 \section{SM Model Field}
 
-	The previous section describes the model in polar/cylindrical coordinates (they are equivalent at $z=0$), here we convert the model to SM coordinates by rotating about the $z$-axis.
+	The previous section describes the model in cylindrical coordinates, here we convert the model to SM coordinates by rotating about the $z$-axis.
 	
 	Considering an Electric field vector $\mathbf{E}(r,\phi)$ with components $E_r$ and $E_\phi$ -- we need to rotate this vector by $\phi$ to transform into SM coordinates.
 	

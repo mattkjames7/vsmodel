@@ -4,44 +4,44 @@ The top-level auxiliary file: vsmodel.aux
 The style file: agu08.bst
 Database file #1: references.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-You've used 4 entries,
+You've used 5 entries,
             3145 wiz_defined-function locations,
-            1103 strings with 10322 characters,
-and the built_in function-call counts, 4345 in all, are:
-= -- 557
-> -- 71
+            1111 strings with 10495 characters,
+and the built_in function-call counts, 4853 in all, are:
+= -- 593
+> -- 100
 < -- 3
-+ -- 58
-- -- 19
-* -- 222
-:= -- 367
-add.period$ -- 4
-call.type$ -- 4
-change.case$ -- 17
-chr.to.int$ -- 5
-cite$ -- 4
-duplicate$ -- 503
-empty$ -- 240
-format.name$ -- 28
-if$ -- 879
++ -- 70
+- -- 26
+* -- 268
+:= -- 435
+add.period$ -- 5
+call.type$ -- 5
+change.case$ -- 21
+chr.to.int$ -- 6
+cite$ -- 5
+duplicate$ -- 548
+empty$ -- 279
+format.name$ -- 38
+if$ -- 981
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 34
-newline$ -- 19
-num.names$ -- 16
-pop$ -- 148
+missing$ -- 42
+newline$ -- 22
+num.names$ -- 20
+pop$ -- 166
 preamble$ -- 1
-purify$ -- 13
+purify$ -- 16
 quote$ -- 0
-skip$ -- 331
+skip$ -- 351
 stack$ -- 0
-substring$ -- 228
-swap$ -- 462
+substring$ -- 231
+swap$ -- 485
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 36
+type$ -- 45
 warning$ -- 0
-while$ -- 20
+while$ -- 23
 width$ -- 0
-write$ -- 54
+write$ -- 66
