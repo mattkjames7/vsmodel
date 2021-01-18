@@ -110,7 +110,7 @@ E_z &= 0.
 	
 	\begin{align}
 		V_s(Kp) &= 0.75 K_p^2 \text{ (in kV)}, \\
-		F(r,\phi,K_p) &= \frac{1}{2} + \frac{1}{\pi}\arctan{\left[\frac{2}{\alpha(\phi,K_p)}\left\{ r - R_s(\phi)\right\}\right]}, \\
+		F(r,\phi,K_p) &= \frac{1}{2} + \frac{1}{\pi}\arctan{\left[\frac{2}{\alpha(\phi,K_p)}\left\{ r - R_s(\phi,K_p)\right\}\right]}, \\
 		G(\phi) &= \sum_{m=0}^{2} \left\{A_m \cos{[m(\phi - \phi_0)]} + B_m \sin{[m(\phi-\phi_0)]} \right\},
 	\end{align}
 	
@@ -134,7 +134,83 @@ E_z &= 0.
 		E_\phi &= \frac{1}{r} V_s \left[ F(r,\phi,K_p)\frac{\text{d} G(\phi)}{\text{d} \phi} + \frac{\partial F(r,\phi,K_p)}{\partial \phi} G(\phi) \right],\\
 		E_z &= 0.
 	\end{align}
+	
+	\subsection{Derivatives: $\frac{\partial F}{\partial r}$}
+		\begin{align}
+			\frac{\partial F}{\partial r} &= \frac{\partial}{\partial r} \left(\frac{1}{2} + \frac{1}{\pi}\arctan{\left[\frac{2}{\alpha}\left\{r - R_s\right\}\right]}\right) \\
+			&= \frac{\partial}{\partial r}\left(\frac{1}{2} + \frac{1}{\pi}\arctan\left[f\right]\right) \\
+			&= 0 + \frac{1}{\pi}\left(\frac{\partial}{\partial f}\arctan{f}\right)\frac{\partial f}{\partial r},
+		\end{align}
+		
+		where
+		
+		\begin{equation}
+			\frac{\partial }{\partial f} \arctan{f} = \frac{1}{1 + f^2},
+		\end{equation}
+		
+		and
+		
+		\begin{equation}
+			\frac{\partial f}{\partial r} = \frac{2}{\alpha}.
+		\end{equation}
+		
+		So,
+		
+		\begin{equation}
+			\boxed{\frac{\partial F}{\partial r} = \frac{2}{\alpha \pi} \left[\frac{1}{1 + f^2}\right].}
+		\end{equation}
+	
+	\subsection{Derivatives: $\frac{\partial F}{\partial \phi}$}
+		
+		\begin{align}
+			\frac{\partial F}{\partial \phi} &= \frac{\partial}{\partial \phi} \left(\frac{1}{2} + \frac{1}{\pi}\arctan{\left[\frac{2}{\alpha}\left\{r - R_s\right\}\right]}\right) \\
+			&= \frac{\partial}{\partial \phi}\left(\frac{1}{2} + \frac{1}{\pi}\arctan\left[f\right]\right) \\
+			&= 0 + \frac{1}{\pi}\left(\frac{\partial}{\partial f}\arctan{f}\right)\frac{\partial f}{\partial \phi},
+		\end{align}
+		
+		where
 
+		\begin{align}
+			\frac{\partial }{\partial f} \arctan{f} &= \frac{1}{1 + f^2}, \\
+			\frac{\partial f}{\partial \phi} &= \frac{\partial }{\partial \phi} (g(\phi,K_p) h(\phi,K_p)), \\
+			&= \frac{\partial g}{\partial \phi}h + g\frac{\partial h}{\partial \phi},\\
+			\frac{\partial g}{\partial \phi} &= \frac{\partial}{\partial \phi} \left(\frac{2}{\alpha}\right) = \frac{\partial g}{\partial \alpha} \frac{\partial \alpha}{\partial \phi} = -\frac{2}{\alpha^2}\frac{\partial \alpha}{\partial \phi}, \\
+			\frac{\partial h}{\partial \phi} &= -\frac{\partial R_s}{\partial \phi}.
+		\end{align}
+		
+		\begin{equation}
+			\boxed{\therefore 	\frac{\partial F}{\partial \phi} = \frac{1}{\pi} \left(\frac{1}{1+f^2}\right) \left[\frac{-2}{\alpha^2}\frac{\partial \alpha}{\partial \phi} h - g \frac{\partial R_s}{\partial \phi} \right].}
+		\end{equation}
+
+		
+	\subsection{Derivatives: $\frac{\partial R_s}{\partial \phi}$}
+		
+		\begin{align}
+			\frac{\partial R_s}{\partial \phi} &= R_0 \frac{\mathrm{d}}{\mathrm{d} \phi} \left\{ \left(\frac{1+\beta}{1 + \beta\cos{(\phi-\pi)}}\right)^\kappa \right\} = R_0 \frac{\mathrm{d}}{\mathrm{d} S} \left\{ S^\kappa \right\} \frac{\mathrm{d} S}{\mathrm{d} \phi}, \\
+			S &= \frac{1+\beta}{1 + \beta\cos{(\phi-\pi)}} = \frac{p}{q}, \\
+			\frac{\mathrm{d}}{\mathrm{d} S} \left\{ S^\kappa \right\} &= \kappa S^{(\kappa -1)} = \kappa \left(\frac{1+\beta}{1 + \beta\cos{(\phi-\pi)}}\right)^{\kappa-1},\\
+			\frac{\mathrm{d} S}{\mathrm{d} \phi} &= \frac{\frac{\text{d} p}{\text{d} \phi}q - p \frac{\mathrm{d} q}{\mathrm{d} \phi}}{q^2} = -\frac{p}{q^2} \frac{\mathrm{d} q}{\mathrm{d} \phi} = \frac{1 + \beta}{(1 + \beta\cos{(\phi - \pi)})^2} \cdot \beta \sin{(\phi - \pi)}, 
+		\end{align}
+		
+		\begin{equation}
+			\boxed{\therefore \frac{\partial R_s}{\partial \phi} = -R_0\frac{1}{q}\frac{\mathrm{d} q}{\mathrm{d} \phi} \kappa \left( \frac{p}{q} \right)^{\kappa}  = R_0 \frac{(1 + \beta)\beta \sin{(\phi - \pi)}}{(1 + \beta\cos{(\phi - \pi)})^2} \kappa \left(\frac{1+\beta}{1 + \beta\cos{(\phi-\pi)}}\right)^{\kappa-1}.}
+		\end{equation}
+			
+		
+		
+	\subsection{Derivatives: $\frac{\partial \alpha}{\partial \phi}$}
+	
+		\begin{equation}
+			\boxed{\frac{\mathrm{d} \alpha}{\mathrm{d} \phi} = -(2.55 - 0.27 K_p)\sin{\left(\phi - \frac{7\pi}{12}\right)}}
+		\end{equation}
+	
+	\subsection{Derivatives: $\frac{\mathrm{d} G}{\mathrm{d} \phi}$}
+	
+		\begin{equation}
+			\boxed{\frac{\mathrm{d} G}{\mathrm{d} \phi} = \sum_{m=0}^{2} \left\{-m A_m \sin{[m(\phi - \phi_0)]} + m B_m \cos{[m(\phi-\phi_0)]} \right\}.}
+		\end{equation}
+		
+	
 \section{SM Model Field}
 
 	The previous section describes the model in polar/cylindrical coordinates (they are equivalent at $z=0$), here we convert the model to SM coordinates by rotating about the $z$-axis.

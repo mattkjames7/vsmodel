@@ -8,7 +8,7 @@ def _F(r,phi,Kp):
 
 	return F
 	
-def _G(phi):
+def _dGdphi(phi):
 	
 	Am = [0.53,0.37,0.1]
 	Bm = [0.0,0.21,-0.1]
@@ -23,7 +23,7 @@ def _G(phi):
 	
 	return G
 	
-def _dGdphi(phi):
+def _G(phi):
 	Am = [0.53,0.37,0.1]
 	Bm = [0.0,0.21,-0.1]
 	
@@ -63,6 +63,17 @@ def _Rs(phi,Kp):
 
 	return Rs
 	
+def _dRsdphi(phi,Kp):
+	kappa = 0.14
+	beta = 0.97	
+	R0 = _R0(Kp)
+	p = 1 + beta
+	q = 1.0 + beta*np.cos(phi - np.pi)
+	dqdphi = -beta*np.sin(phi-np.pi)
+	
+	dRsdphi = -(R0/q)*dqdphi*kappa*((p/q)**kappa)
+	return dRsdphi
+	
 def _dalphadphi(phi,Kp):
 	'''
 	The derivative of alpha w.r.t. phi
@@ -100,26 +111,20 @@ def _Er(r,phi,Kp):
 	
 def _dFdphi(r,phi,Kp):
 	
-	R0 = _R0(Kp)
 	alpha = _alpha(phi,Kp)
 	Rs = _Rs(phi,Kp)
 	f = (2.0/alpha)*(r - Rs)
 	dFdf = 1.0/(1.0 + f**2)
-	beta = 0.97
-	kappa = 0.14
-	A = (2.0/alpha)
-	B = (r - Rs)
-	dAdalpha = -2.0*(alpha**-2)
-	dalphadphi = -(2.55 - 0.27*Kp)*np.sin(phi - (7.0*np.pi/12.0))
-	dAdphi = dAdalpha * dalphadphi
-	p = 1.0 + beta
-	q = 1.0 + beta*np.cos(phi - np.pi)
-	dqdphi = -beta*np.sin(phi - np.pi)
-	dgdphi = -p*dqdphi/(q**2)
-	g = p/q
-	dRsdg = R0*kappa*(g**(kappa-1))
-	dBdphi = -dRsdg*dgdphi
-	dfdphi =  A*dBdphi + B*dAdphi
+
+	dalphadphi = _dalphadphi(phi,Kp)
+	dgdphi = (-2.0/alpha)*dalphadphi
+	
+	g = (2/alpha)
+	dRsdphi = _dRsdphi(phi,Kp)
+
+	h = (r - Rs)
+
+	dfdphi =  dgdphi*h - g*dRsdphi
 	dFdphi = (1.0/np.pi)*dFdf*dfdphi
 	
 	return dFdphi
