@@ -11,6 +11,7 @@ from .CorotModel import CorotModelCart,CorotPotentialCart
 from .MCModel import MCModelCart,MCPotentialCart
 from .SAPSModel import SAPSModelCart,SAPSPotentialCart
 from .SWModel import SWModelCart,SWPotentialCart
+from .VExB import VExB
 	
 zlabs = {	'U':		'Potential (kV)',
 			'E':		'Electric Field, $|\mathbf{E}|$, (mV m$^{-1}$)',
@@ -39,10 +40,41 @@ zlabs = {	'U':		'Potential (kV)',
 			'E_SW':		'SW Convection Electric Field, $|\mathbf{E}|$, (mV m$^{-1}$)',
 			'Ex_SW':	'SW Convection Electric Field, $E_x$, (mV m$^{-1}$)',
 			'Ey_SW':	'SW Convection Electric Field, $E_y$, (mV m$^{-1}$)',
+			'V_SAPS':	'SAPS Velocity, $|\mathbf{V}|$, (m s$^{-1}$)',
+			'Vx_SAPS':	'SAPS Velocity, $V_x$, (m s$^{-1}$)',
+			'Vy_SAPS':	'SAPS Velocity, $V_y$, (m s$^{-1}$)',
+			'V_Corot':	'Corotation Velocity, $|\mathbf{V}|$, (m s$^{-1}$)',
+			'Vx_Corot':	'Corotation Velocity, $V_x$, (m s$^{-1}$)',
+			'Vy_Corot':	'Corotation Velocity, $V_y$, (m s$^{-1}$)',
+			'V_MC':		'Maynard and Chen 1975 Velocity, $|\mathbf{V}|$, (m s$^{-1}$)',
+			'Vx_MC':	'Maynard and Chen 1975 Velocity, $V_x$, (m s$^{-1}$)',
+			'Vy_MC':	'Maynard and Chen 1975 Velocity, $V_y$, (m s$^{-1}$)',
+			'V_SW':		'SW Convection Velocity, $|\mathbf{V}|$, (m s$^{-1}$)',
+			'Vx_SW':	'SW Convection Velocity, $V_x$, (m s$^{-1}$)',
+			'Vy_SW':	'SW Convection Velocity, $V_y$, (m s$^{-1}$)',
 			}
+
+#A function wrapper for the potential
+def _PotentialCart(x,y,Kp,Esw,Vsw,Bz,Emin,Escale):
+	return PotentialCart(x,y,Kp,Esw,Vsw,Bz,Emin,Escale)
 			
-def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,Esw=None,Vsw=None,Bz=None,fig=None,maps=[1,1,0,0],
-		ShowContour=True,zlog=True,cmap='gnuplot',scale=None,Verbose=False,fmt='%1.0f',nlvl=10):
+#List the models 0: Full; 1: Corot; 2: MC; 3: SW; 4: SAPS
+UModels = [PotentialCart,CorotPotentialCart,MCPotentialCart,SWPotentialCart,SAPSPotentialCart]
+EModels = [ModelECart,CorotModelCart,MCModelCart,SWModelCart,SAPSModelCart]
+BModel = GetDipole()
+
+#map the model string to the index
+modelmap = {'Full' : 0,
+			'Corot' : 1,
+			'MC' : 2,
+			'SW' : 3,
+			'SAPS' : 4}
+
+
+def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,Esw=None,Vsw=None,
+		Bz=None,Emin=0.25,Escale=0.2,fig=None,maps=[1,1,0,0],
+		ShowContour=True,zlog=True,cmap='gnuplot',scale=None,
+		Verbose=False,fmt='%1.0f',nlvl=10):
 	'''
 	Plots various models in the equatorial plane.
 
@@ -58,6 +90,12 @@ def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,Esw=None,Vsw=None,Bz=None,fig=
 		'Ex'|'Ey'|'E' - Electric field
 		'Vx'|'Vy'|'V' - ExB drift
 		'Bx'|'By'|'Bz'|'B' - Magnetic dipole field
+		The above strings can also be combined with one of the following
+		substrings in order to look at a specific model component: 
+		'_Corot'|'_MC'|'_SW'|'_SAPS' - corresponding to the corotational,
+		Maynard and Chen 1975, Solar wind driven convection and SAPS
+		components. e.g. 'Ex_SAPS' will present the x-component of the 
+		electric field due to SAPS.
 	Rmax : float
 		Limits of the plot
 	dR : float
@@ -104,43 +142,53 @@ def PlotModelEq(Model='V',Rmax=10.0,dR=0.1,Kp=1.0,Esw=None,Vsw=None,Bz=None,fig=
 	zc = np.zeros(xc.shape)
 	R = np.sqrt(xc**2 + yc**2 + zc**2)
 	
-	#calculate the model
-	if Model == 'U':
-		data = PotentialCart(xc,yc,Kp,Esw,Vsw,Bz)
-	elif Model in ['E','Ex','Ey']:
-		data = ModelECart(xc,yc,Kp,Esw,Vsw,Bz)
-	elif Model in ['B','Bx','By','Bz']:
-		dip = GetDipole()
-		data = dip(xc,yc,zc)
-	elif Model in ['V','Vx','Vy']:
-		data = VExBModel(xc,yc,zc,Kp,Esw,Vsw,Bz)
-	elif 'E' in Model and 'SAPS' in Model:
-		data = SAPSModelCart(xc,yc,Kp)
-	elif 'E' in Model and 'Corot' in Model:
-		data = CorotModelCart(xc,yc)
-	elif 'E' in Model and 'MC' in Model:
-		data = MCModelCart(xc,yc,Kp)
-	elif 'E' in Model and 'SW' in Model:
-		data = SWModelCart(xc,yc,Esw,Vsw,Bz)
-	elif 'U' in Model and 'SAPS' in Model:
-		data = SAPSPotentialCart(xc,yc,Kp)
-	elif 'U' in Model and 'Corot' in Model:
-		data = CorotPotentialCart(xc,yc)
-	elif 'U' in Model and 'MC' in Model:
-		data = MCPotentialCart(xc,yc,Kp)
-	elif 'U' in Model and 'SW' in Model:
-		data = SWPotentialCart(xc,yc,Esw,Vsw,Bz)
 	
-	if 'x' in Model:
-		data = data[0]
-	elif 'y' in Model:
-		data = data[1]
-	elif 'z' in Model:
-		data = data[2]
+	#work out which model to use
+	FullModel = not '_' in Model
+	if FullModel:
+		Mtype = Model
+		Mcomp = 'Full'
+	else:
+		Mtype,Mcomp = Model.split('_')
+	Mindex = modelmap[Mcomp]
+	if Mcomp == 'Full':
+		args = (xc,yc,Kp,Esw,Vsw,Bz,Emin,Escale)
+	elif Mcomp in ['SAPS','MC']:
+		args = (xc,yc,Kp)
+	elif Mcomp == 'SW':
+		args = (xc,yc,Esw,Vsw,Bz,Emin,Escale)
+	else:
+		args = (xc,yc)
 	
-	if not ('U' in Model or 'x' in Model or 'y' in Model or 'z' in Model):
-		data = np.sqrt(data[0]**2 + data[1]**2 + data[2]**2)
+	useEModel = 'E' in Model or 'V' in Model
+	useBModel = 'B' in Model or 'V' in Model
+	if useEModel:
+		EModel = EModels[Mindex]
+		E = EModel(*args)
+	if useBModel:
+		B = BModel(xc,yc,zc)
 	
+	if 'U' in Model:
+		UModel = UModels[Mindex]
+		data = UModel(*args)
+	else:
+		if 'B' in Mtype:
+			data = B
+		elif 'E' in Mtype:
+			data = E
+		else:
+			data = VExB(E[0]*1e-3,E[1]*1e-3,E[2]*1e-3,B[0]*1e-9,B[1]*1e-9,B[2]*1e-9)
+	
+		if 'x' in Model:
+			data = data[0]
+		elif 'y' in Model:
+			data = data[1]
+		elif 'z' in Model:
+			data = data[2]
+		else:
+			data = np.sqrt(data[0]**2 + data[1]**2 + data[2]**2)	
+	
+		
 	#remove stuff from within the planet
 	bad = np.where(R < 1.0)
 	data[bad] = np.nan

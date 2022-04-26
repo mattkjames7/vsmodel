@@ -1,6 +1,6 @@
 import numpy as np
 
-def SWPotential(r,phi,Esw=None,Vsw=-400.0,Bz=0.0):
+def SWPotential(r,phi,Esw=None,Vsw=-400.0,Bz=0.0,Emin=0.25,Escale=0.2):
 	'''
 	Solar wind convection component of the potential as proposed by 
 	Goldstein et al 2005.
@@ -28,7 +28,8 @@ def SWPotential(r,phi,Esw=None,Vsw=-400.0,Bz=0.0):
 	'''
 	#check if Esw is provided or whether we use separate Vsw and Bz
 	if Esw is None:
-		Esw = (np.float64(Bz*1e-9)*np.float64(Vsw*1e6)).clip(min=0.1)
+		Esw = (np.float64(Bz*1e-9)*np.float64(Vsw*1e6))
+	Esw = np.clip(Esw,Emin,np.inf)
 	
 	#convert from kV/Re to mV/m
 	C = 1000000.0/6.378e6
@@ -37,7 +38,7 @@ def SWPotential(r,phi,Esw=None,Vsw=-400.0,Bz=0.0):
 	Esw = Esw/C
 	
 	#calculate A
-	A = 0.12*Esw/6.6	
+	A = Escale*Esw/6.6	
 
 	#the shielding parameter
 	gamma = 2.0
@@ -47,7 +48,7 @@ def SWPotential(r,phi,Esw=None,Vsw=-400.0,Bz=0.0):
 	
 	return U	
 
-def SWPotentialCart(x,y,Esw=None,Vsw=-400.0,Bz=0.0):
+def SWPotentialCart(x,y,Esw=None,Vsw=-400.0,Bz=0.0,Emin=0.25,Escale=0.2):
 	'''
 	Solar wind convection component of the potential as proposed by 
 	Goldstein et al 2005.
@@ -78,11 +79,11 @@ def SWPotentialCart(x,y,Esw=None,Vsw=-400.0,Bz=0.0):
 	r = np.sqrt(x**2 + y**2)
 	phi = np.arctan2(y,x)
 
-	U = SWPotential(r,phi,Esw,Vsw,Bz)
+	U = SWPotential(r,phi,Esw,Vsw,Bz,Emin,Escale)
 	
 	return U
 
-def SWModel(r,phi,Esw=None,Vsw=-400.0,Bz=0.0):
+def SWModel(r,phi,Esw=None,Vsw=-400.0,Bz=0.0,Emin=0.25,Escale=0.2):
 	'''
 	Solar wind convection component as proposed by Goldstein et al 2005.
 	
@@ -115,13 +116,14 @@ def SWModel(r,phi,Esw=None,Vsw=-400.0,Bz=0.0):
 	
 	#check if Esw is provided or whether we use separate Vsw and Bz
 	if Esw is None:
-		Esw = (np.float64(Bz*1e-9)*np.float64(Vsw*1e6)).clip(min=0.1)
+		Esw = (np.float64(Bz*1e-9)*np.float64(Vsw*1e6))
+	Esw = np.clip(Esw,Emin,np.inf)
 	
 	#convert E to kV/Re
 	Esw = Esw/C
 	
 	#calculate A
-	A = 0.12*Esw/6.6
+	A = Escale*Esw/6.6
 	
 	#calculate the components in cylindrical coordinates
 	gamma = 2.0
@@ -131,7 +133,7 @@ def SWModel(r,phi,Esw=None,Vsw=-400.0,Bz=0.0):
 	
 	return (Er*C,Ep*C,Ez*C)
 	
-def SWModelCart(x,y,Esw=None,Vsw=-400.0,Bz=0.0):
+def SWModelCart(x,y,Esw=None,Vsw=-400.0,Bz=0.0,Emin=0.25,Escale=0.2):
 	'''
 	Solar wind convection component as proposed by Goldstein et al 2005.
 	
@@ -163,7 +165,7 @@ def SWModelCart(x,y,Esw=None,Vsw=-400.0,Bz=0.0):
 	phi = np.arctan2(y,x)
 
 	#call the cylindrical version of the model
-	Er,Ep,Ez = SWModel(r,phi,Esw,Vsw,Bz)
+	Er,Ep,Ez = SWModel(r,phi,Esw,Vsw,Bz,Emin,Escale)
 	
 	#convert to cartesian components
 	Ex = Er*np.cos(phi) - Ep*np.sin(phi)

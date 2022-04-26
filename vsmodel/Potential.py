@@ -4,7 +4,7 @@ from .MCModel import MCPotential
 from .SAPSModel import SAPSPotential 
 from .SWModel import SWPotential
 
-def Potential(r,phi,Kp=1.0,Esw=None,Vsw=None,Bz=None):
+def Potential(r,phi,Kp=1.0,Esw=None,Vsw=None,Bz=None,Emin=0.25,Escale=0.2):
 	'''
 	Get the Volland-Stern electric field model (see 
 	doi:10.1029/JA078i001p00171 and doi:10.1029/JA080i004p00595) using 
@@ -49,7 +49,7 @@ def Potential(r,phi,Kp=1.0,Esw=None,Vsw=None,Bz=None):
 		# in this case use the Goldstein et al version of the VS model
 		
 		U0 = SAPSPotential(r,phi,Kp)
-		U1 = SWPotential(r,phi,Esw,Vsw,Bz)
+		U1 = SWPotential(r,phi,Esw,Vsw,Bz,Emin,Escale)
 		
 		Uc = U0 + U1
 	else:
@@ -65,7 +65,7 @@ def Potential(r,phi,Kp=1.0,Esw=None,Vsw=None,Bz=None):
 	return U
 
 
-def PotentialCart(x,y,Kp=1.0,Esw=None,Vsw=None,Bz=None):
+def PotentialCart(x,y,Kp=1.0,Esw=None,Vsw=None,Bz=None,Emin=0.25,Escale=0.2):
 	'''
 	Get the Volland-Stern electric field model (see 
 	doi:10.1029/JA078i001p00171 and doi:10.1029/JA080i004p00595) using 
@@ -106,6 +106,6 @@ def PotentialCart(x,y,Kp=1.0,Esw=None,Vsw=None,Bz=None):
 	phi = np.arctan2(y,x)
 
 	#call the cylindrical version of the model
-	U = Potential(r,phi,Kp,Esw,Vsw,Bz)
+	U = Potential(r,phi,Kp,Esw,Vsw,Bz,Emin,Escale)
 	
 	return U

@@ -4,7 +4,7 @@ from .SWModel import SWModel
 from .SAPSModel import SAPSModel
 from .MCModel import MCModel
 
-def ModelE(r,phi,Kp=1.0,Esw=None,Vsw=None,Bz=None):
+def ModelE(r,phi,Kp=1.0,Esw=None,Vsw=None,Bz=None,Emin=0.25,Escale=0.2):
 	'''
 	Get the Volland-Stern electric field model (see 
 	doi:10.1029/JA078i001p00171 and doi:10.1029/JA080i004p00595) using 
@@ -50,7 +50,7 @@ def ModelE(r,phi,Kp=1.0,Esw=None,Vsw=None,Bz=None):
 		# in this case use the Goldstein et al version of the VS model
 		
 		Er0,Ep0,Ez0 = SAPSModel(r,phi,Kp)
-		Er1,Ep1,Ez1 = SWModel(r,phi,Esw,Vsw,Bz)
+		Er1,Ep1,Ez1 = SWModel(r,phi,Esw,Vsw,Bz,Emin,Escale)
 		
 		Erc = Er0 + Er1
 		Epc = Ep0 + Ep1
@@ -71,7 +71,7 @@ def ModelE(r,phi,Kp=1.0,Esw=None,Vsw=None,Bz=None):
 
 
 	
-def ModelECart(x,y,Kp=1.0,Esw=None,Vsw=None,Bz=None):
+def ModelECart(x,y,Kp=1.0,Esw=None,Vsw=None,Bz=None,Emin=0.25,Escale=0.2):
 	'''
 	Get the Volland-Stern electric field model (see 
 	doi:10.1029/JA078i001p00171 and doi:10.1029/JA080i004p00595) using 
@@ -113,7 +113,7 @@ def ModelECart(x,y,Kp=1.0,Esw=None,Vsw=None,Bz=None):
 	phi = np.arctan2(y,x)
 
 	#call the cylindrical version of the model
-	Er,Ep,Ez = ModelE(r,phi,Kp,Esw,Vsw,Bz)
+	Er,Ep,Ez = ModelE(r,phi,Kp,Esw,Vsw,Bz,Emin,Escale)
 	
 	#convert to cartesian components
 	Ex = Er*np.cos(phi) - Ep*np.sin(phi)
